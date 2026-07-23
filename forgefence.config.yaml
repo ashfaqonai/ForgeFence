@@ -1,0 +1,15 @@
+# Point Cursor at ForgeFence instead of raw MCP servers.
+# See README for mcp.json snippet.
+
+policy: ./policies/default.yaml
+pins: ./pins/tools.json
+audit: ./audit/forgefence.jsonl
+
+# Built-in demo tools (private read → public post) for the exfil proof.
+demo: true
+
+# Optional upstream MCP servers:
+# upstream:
+#   - name: filesystem
+#     command: npx
+#     args: ["-y", "@modelcontextprotocol/server-filesystem", "/safe/path"]

@@ -1,0 +1,43 @@
+# ForgeFence default sink policy
+# Untrusted / secret-tainted context cannot drive irreversible tools.
+
+version: 1
+
+sources:
+  - match: "demo__read_private"
+    labels: [untrusted, confidential]
+  - match: "filesystem__read_*"
+    labels: [untrusted]
+  - match: "*__read_file"
+    labels: [untrusted]
+  - match: "*__query*"
+    labels: [untrusted]
+  - match: "*__get_*"
+    labels: [untrusted]
+
+sinks:
+  - match: "demo__post_public"
+    deny_if_tainted_with: [untrusted, confidential, secret]
+    reason: "Cannot post publicly while session holds untrusted/confidential data"
+  - match: "*__send_email"
+    deny_if_tainted_with: [untrusted, confidential, secret, pii]
+    reason: "Email is an exfiltration sink"
+  - match: "*__http_request"
+    deny_if_tainted_with: [confidential, secret]
+    reason: "HTTP may exfiltrate confidential data"
+  - match: "*__write_file"
+    deny_if_tainted_with: [secret]
+    reason: "Secrets must not be written to disk without declassification"
+  - match: "*__run_terminal"
+    deny_if_tainted_with: [untrusted, secret]
+    reason: "Shell is a high-impact sink under tainted context"
+  - match: "*__place_order"
+    deny_if_tainted_with: [untrusted]
+    reason: "Trading actions require clean session or human approval"
+
+allow_always:
+  - "demo__ping"
+  - "forgefence__*"
+
+audit:
+  path: "./audit/forgefence.jsonl"

@@ -1,0 +1,21 @@
+{
+  "name": "forgefence",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ForgeFence — session information-flow control for MCP agents. A ForgeMeter product by Saabsa Solutions.",
+  "workspaces": [
+    "packages/proxy",
+    "packages/site"
+  ],
+  "scripts": {
+    "build": "npm run build -w @forgefence/proxy && npm run build -w @forgefence/site",
+    "dev:site": "npm run dev -w @forgefence/site",
+    "start:proxy": "npm run start -w @forgefence/proxy",
+    "demo": "npm run demo -w @forgefence/proxy",
+    "test": "npm run test -w @forgefence/proxy"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "Apache-2.0"
+}
