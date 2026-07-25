@@ -7,6 +7,8 @@ A [ForgeMeter](https://forgemeter.com) product by [Saabsa Solutions](https://www
 
 Marketing site: [fence.forgemeter.com](https://fence.forgemeter.com)
 
+**Demo script (record this):** [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)
+
 ## What it does
 
 ForgeFence sits between your agent (Cursor, Claude, custom) and MCP servers:

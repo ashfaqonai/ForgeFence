@@ -1,8 +1,11 @@
 "use client";
 
 import styles from "./page.module.css";
+import { DEMO_VIDEO_EMBED_URL, DEMO_VIDEO_TITLE } from "../lib/demo-video";
 
 export default function HomePage() {
+  const hasVideo = Boolean(DEMO_VIDEO_EMBED_URL.trim());
+
   return (
     <div className={styles.page}>
       <div className={styles.atmosphere} aria-hidden />
@@ -12,6 +15,7 @@ export default function HomePage() {
           ForgeFence
         </a>
         <nav className={styles.navLinks}>
+          <a href="#video">Watch demo</a>
           <a href="#how">How it works</a>
           <a href="#install">Install</a>
           <a href="https://forgemeter.com">ForgeMeter</a>
@@ -20,20 +24,21 @@ export default function HomePage() {
 
       <main className={styles.main}>
         <section className={styles.hero}>
-          <p className={styles.kicker}>A ForgeMeter product · Saabsa Solutions</p>
+          <p className={styles.kicker}>A ForgeMeter product · Saabsa Solutions · Free & open source</p>
           <h1 className={styles.title}>
             Forge<span>Fence</span>
           </h1>
           <p className={styles.lede}>
-            Session information-flow control for MCP agents. Contain exfiltration
-            even after prompt injection succeeds.
+            Your coding agent can read private data, then post it to Slack.
+            ForgeFence sits in the middle and <em>blocks that second step</em> —
+            even if the model was tricked.
           </p>
           <div className={styles.ctaRow}>
-            <a className={styles.ctaPrimary} href="#install">
-              Install locally
+            <a className={styles.ctaPrimary} href="#video">
+              Watch the 90-second demo
             </a>
-            <a className={styles.ctaGhost} href="#demo">
-              See the exfil block
+            <a className={styles.ctaGhost} href="#install">
+              Install locally
             </a>
           </div>
           <div className={styles.heroVisual} aria-hidden>
@@ -41,33 +46,88 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className={styles.section} id="how">
-          <h2 className={styles.h2}>Inside the agent loop</h2>
+        <section className={styles.section} id="video">
+          <h2 className={styles.h2}>See it in one story</h2>
           <p className={styles.sectionLede}>
-            Classifiers race the model. ForgeFence labels tool outputs, accumulates
-            session taint, and refuses sinks when untrusted data would drive them.
+            Same attack path every time: <strong>read confidential → try to publish</strong>.
+            ForgeFence allows the read, marks the session, then denies the leak.
+          </p>
+
+          {hasVideo ? (
+            <div className={styles.videoFrame}>
+              <iframe
+                title={DEMO_VIDEO_TITLE}
+                src={DEMO_VIDEO_EMBED_URL}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <div className={styles.videoPlaceholder}>
+              <p className={styles.videoPlaceholderTitle}>Demo video coming soon</p>
+              <p>
+                Record with the script in <code>docs/DEMO_SCRIPT.md</code>, then paste the
+                YouTube/Loom embed URL into <code>packages/site/lib/demo-video.ts</code>.
+              </p>
+            </div>
+          )}
+
+          <ol className={styles.storyboard}>
+            <li>
+              <span className={styles.storyStep}>1</span>
+              <div>
+                <strong>Clean session</strong>
+                <p>Agent can post publicly — nothing sensitive was read yet.</p>
+              </div>
+            </li>
+            <li>
+              <span className={styles.storyStep}>2</span>
+              <div>
+                <strong>Read private</strong>
+                <p>
+                  <code>demo__read_private</code> returns a fake SSN / API key. Session is
+                  now <em>tainted</em>.
+                </p>
+              </div>
+            </li>
+            <li>
+              <span className={styles.storyStep}>3</span>
+              <div>
+                <strong>Public post denied</strong>
+                <p>
+                  <code>demo__post_public</code> returns <strong>ForgeFence DENY</strong> —
+                  the fence closed.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <section className={styles.section} id="how">
+          <h2 className={styles.h2}>What it actually does</h2>
+          <p className={styles.sectionLede}>
+            Not another chatbot filter. A rule engine on <strong>tool calls</strong>.
           </p>
           <ol className={styles.steps}>
             <li>
               <strong>Pin</strong>
-              <span>Hash tool descriptions and schemas on first trust. Drift = rug-pull hide.</span>
+              <span>Remember each tool’s description. If it silently changes (rug-pull), hide it.</span>
             </li>
             <li>
               <strong>Taint</strong>
-              <span>Reads and queries stamp the session with untrusted / confidential / secret.</span>
+              <span>When a tool returns sensitive data, stamp that on the session.</span>
             </li>
             <li>
               <strong>Fence</strong>
-              <span>Email, HTTP, shell, public post — denied when labels conflict with policy.</span>
+              <span>Block email, HTTP, shell, Slack-style posts while that stamp is present.</span>
             </li>
           </ol>
         </section>
 
         <section className={styles.section} id="demo">
-          <h2 className={styles.h2}>The proof</h2>
+          <h2 className={styles.h2}>Run the proof yourself</h2>
           <p className={styles.sectionLede}>
-            Built-in demo tools: confidential read → public post. Same path attackers use
-            across Slack + filesystem MCP.
+            No Cursor required for this check — thirty seconds in a terminal.
           </p>
           <pre className={styles.code}>
 {`$ npm run demo
@@ -84,10 +144,10 @@ ForgeFence exfil-block demo passed.`}
         <section className={styles.section} id="install">
           <h2 className={styles.h2}>Install in Cursor</h2>
           <p className={styles.sectionLede}>
-            Self-hosted. No cloud account. Point MCP at ForgeFence instead of raw servers.
+            Self-hosted. Free. Point MCP at ForgeFence instead of raw servers.
           </p>
           <pre className={styles.code}>
-{`git clone <your-forgefence-repo>
+{`git clone https://github.com/ashfaqonai/ForgeFence
 cd ForgeFence && npm install
 
 # mcp.json
@@ -101,7 +161,7 @@ cd ForgeFence && npm install
         "--config",
         "forgefence.config.yaml"
       ],
-      "cwd": "/absolute/path/to/ForgeFence"
+      "cwd": "C:/source/ForgeFence"
     }
   }
 }`}
@@ -113,11 +173,11 @@ cd ForgeFence && npm install
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.h2}>Why not another prompt firewall?</h2>
+          <h2 className={styles.h2}>Why not a prompt firewall?</h2>
           <p className={styles.sectionLede}>
-            Research keeps finding the same gap: cross-tool data leakage is under-defended,
-            and content guards often fail on tool-description poisoning. ForgeFence is a
-            containment primitive — least privilege on information flow, not vibes on text.
+            Jailbreak filters try to police what the model <em>says</em>. ForgeFence polices
+            what tools are <em>allowed to do</em> after sensitive data entered the session —
+            the gap most agent breaches actually use.
           </p>
         </section>
       </main>
@@ -127,9 +187,9 @@ cd ForgeFence && npm install
           <strong>ForgeFence</strong> · ForgeMeter · Saabsa Solutions
         </div>
         <div className={styles.footerLinks}>
+          <a href="https://github.com/ashfaqonai/ForgeFence">GitHub</a>
           <a href="https://forgemeter.com">forgemeter.com</a>
           <a href="https://www.saabsa.com">saabsa.com</a>
-          <a href="https://www.patientree.com">patientree.com</a>
         </div>
       </footer>
     </div>
