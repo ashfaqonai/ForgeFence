@@ -1,15 +1,20 @@
 :root {
-  --bg: #0c0f0e;
-  --bg-elev: #141a17;
-  --ink: #e8efe8;
-  --muted: #8a9a90;
-  --accent: #c4f04d;
-  --accent-dim: #8fb82e;
-  --warn: #e8a54b;
-  --line: rgba(232, 239, 232, 0.12);
-  --glow: rgba(196, 240, 77, 0.14);
-  --font-sans: "DM Sans", system-ui, sans-serif;
-  --font-display: "Instrument Serif", Georgia, serif;
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-elev: #f1f5f9;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --accent: #38bdf8;
+  --accent-hover: #0ea5e9;
+  --accent-dim: rgba(56, 189, 248, 0.12);
+  --on-accent: #0f172a;
+  --line: #e2e8f0;
+  --grid-line: rgba(15, 23, 42, 0.06);
+  --glow: rgba(56, 189, 248, 0.1);
+  --text-gradient: linear-gradient(135deg, #0f172a 0%, #0284c7 50%, #4f46e5 100%);
+  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 * {
@@ -27,6 +32,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -34,5 +48,9 @@ a {
 
 ::selection {
   background: var(--accent);
-  color: #0c0f0e;
+  color: var(--on-accent);
+}
+
+code {
+  font-family: var(--font-mono);
 }
