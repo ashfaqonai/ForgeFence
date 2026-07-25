@@ -11,8 +11,14 @@ export default function HomePage() {
       <div className={styles.atmosphere} aria-hidden />
       <header className={styles.nav}>
         <a className={styles.brand} href="https://fence.forgemeter.com">
-          <span className={styles.brandMark}>FF</span>
-          ForgeFence
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className={styles.brandLogo}
+            src="/brand/lockup.png"
+            alt="ForgeFence by ForgeMeter"
+            width={961}
+            height={332}
+          />
         </a>
         <nav className={styles.navLinks}>
           <a href="#video">Watch demo</a>

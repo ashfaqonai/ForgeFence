@@ -54,25 +54,20 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  line-height: 0;
 }
 
-.brandMark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.5rem;
-  background: var(--accent);
-  color: var(--on-accent);
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 700;
+.brandLogo {
+  display: block;
+  height: 2.75rem;
+  width: auto;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .brandLogo {
+    height: 3.25rem;
+  }
 }
 
 .navLinks {
